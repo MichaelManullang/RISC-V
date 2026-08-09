@@ -1,0 +1,23 @@
+# Toolchain binaries (huge, install separately)
+toolchain/
+spike-src/build/
+
+# Simulation artifacts
+*.vvp
+*.vcd
+*.lxt
+*.lxt2
+*.elf
+*.hex
+*.bin
+*.dump
+
+# Build artifacts
+obj_dir/
+build/
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
