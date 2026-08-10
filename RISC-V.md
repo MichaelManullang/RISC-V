@@ -5,7 +5,7 @@ A staged build plan for designing an RV32I core from scratch, verifying entirely
 ---
 
 ## Stage 0 — Setup & Tooling
-- [x] Install Icarus Verilog (already in use) and Verilator — **Icarus ✅ (v13.0), Verilator ❌ (needs autoconf + sudo)**
+- [x] Install Icarus Verilog (already in use) and Verilator — **Icarus ✅ (v13.0), Verilator ✅ (v5.032)**
 - [x] Install GTKWave for waveform inspection — **✅ (v3.3.126)**
 - [x] Build/install `riscv-gnu-toolchain` (RV32I target) for compiling test programs to ELF/hex — **✅ (SiFive 10.2.0-2020.12.8, at RISC/toolchain)**
 - [x] Build/install Spike (`riscv-isa-sim`) as a golden reference model — **✅ (v1.1.1-dev, in RISC/toolchain)**
@@ -16,25 +16,50 @@ A staged build plan for designing an RV32I core from scratch, verifying entirely
 ---
 
 ## Stage 1 — ISA Study & Architecture Planning
-- [ ] Read the RISC-V Unprivileged ISA spec (RV32I base integer instruction set)
-- [ ] Define instruction categories to support first: R-type, I-type, S-type, B-type, U-type, J-type
-- [ ] Decide register file structure (32 x 32-bit, x0 hardwired to zero)
-- [ ] Sketch a block diagram: single-cycle datapath (PC, instruction memory, register file, ALU, data memory, control unit)
-- [ ] Write an instruction decode table (opcode/funct3/funct7 → control signals) before writing RTL
+- [x] Read the RISC-V Unprivileged ISA spec (RV32I base integer instruction set)
+- [x] Define instruction categories to support first: R-type, I-type, S-type, B-type, U-type, J-type — **✅ R & I-type done (S/B/U/J deferred to later)**
+- [x] Decide register file structure (32 x 32-bit, x0 hardwired to zero)
+- [x] Sketch a block diagram: single-cycle datapath (PC, instruction memory, register file, ALU, data memory, control unit)
+- [x] Write an instruction decode table (opcode/funct3/funct7 → control signals) before writing RTL
 
 ---
 
-## Stage 2 — Single-Cycle RV32I Core
-- [ ] Implement Program Counter + next-PC logic (PC+4, branch/jump targets)
-- [ ] Implement instruction memory interface (simulation-only ROM/RAM model)
-- [ ] Implement register file (2 read ports, 1 write port, x0 = 0)
-- [ ] Implement ALU (add/sub/logic/shift/compare) and ALU control decode
-- [ ] Implement immediate generator for all instruction formats
+## Stage 2 — Single-Cycle RV32I Core (built incrementally, R+I-type first)
+
+### Stage 2A — R-type + I-type ALU ops only (current milestone)
+Scope: ADD/SUB/AND/OR/XOR/SLL/SRL/SRA/SLT/SLTU + their I-type immediate forms.
+No loads/stores, no branches/jumps — PC is just PC+4 every cycle, no data memory yet.
+- [x] Implement Program Counter (PC+4 only, no mux yet) — **✅ PC.sv**
+- [x] Implement instruction memory interface — **✅ imem.sv**
+- [x] Implement register file (2 read ports, 1 write port, x0 = 0) — **✅ regfile.sv**
+- [x] Implement ALU (add/sub/logic/shift/compare) — **✅ ALU.sv (all 10 ops)**
+- [x] Implement immediate generator (I-type only for this milestone) — **✅ imm_generator.sv (covers all formats ahead of time)**
+- [x] Implement control unit (R+I-type decode) — **✅ Control_Unit.sv**
+- [x] Wire up full R+I-type datapath — **✅ Top.sv**
+- [x] Write self-checking testbenches (arithmetic, immediate ops) in Icarus Verilog — **✅ TB_Top.sv, 23/23 pass**
+- [x] Run hand-written assembly test programs and check register state against expected results — **✅ program.hex, all ops verified**
+- [x] Set up shared package (e.g. `riscv_pkg.sv`) for shared types like `alu_op_t` across modules — **✅ riscv_pkg.sv**
+
+### Stage 2B — Loads & Stores
 - [ ] Implement data memory interface (load/store, byte/half/word, sign/zero extend)
-- [ ] Implement control unit (opcode → control signal decode)
-- [ ] Wire up full datapath
-- [ ] Write self-checking testbenches per instruction class (arithmetic, branches, loads/stores, jumps) in Icarus Verilog
-- [ ] Run hand-written assembly test programs and check register/memory state against expected results
+- [ ] Extend immediate generator with S-type
+- [ ] Extend control unit decode table with load/store opcodes
+- [ ] Testbenches: memory read/write round-trips
+
+### Stage 2C — Branches
+- [ ] Extend PC logic with branch mux (PC+4 vs branch target)
+- [ ] Extend immediate generator with B-type
+- [ ] Extend control unit decode table with branch opcodes
+- [ ] Testbenches: loops, conditional branch correctness
+
+### Stage 2D — LUI / AUIPC / JAL (remaining base ISA)
+- [ ] Extend immediate generator with U-type and J-type
+- [ ] Extend control unit decode table with LUI/AUIPC/JAL
+- [ ] Testbenches: function-call-style control flow
+
+### Stage 2E — Full Stage 2 wrap-up
+- [ ] Re-run all testbenches across the complete R+I+S+B+U+J instruction set together
+- [ ] Confirm full single-cycle datapath (as drafted in the Stage 1 block diagram, extended with data memory + branch mux) matches implementation
 
 ---
 

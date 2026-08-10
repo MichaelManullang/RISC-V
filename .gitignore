@@ -8,7 +8,6 @@ spike-src/build/
 *.lxt
 *.lxt2
 *.elf
-*.hex
 *.bin
 *.dump
 
@@ -21,3 +20,10 @@ build/
 *.swo
 *~
 .vscode/
+
+# Icarus Verilog build
+sim/simv
+*.vvp
+
+# Windows Zone.Identifier files
+*:Zone.Identifier

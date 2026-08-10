@@ -8,8 +8,8 @@
 - **Line length**: 100 characters max
 
 ## Reset & Clock
-- **Reset polarity**: Active-low reset (`rst_n`)
-- **Reset type**: Asynchronous assert, synchronous de-assert (preferred for FPGA)
+- **Reset polarity**: Active-high reset (`rst`)
+- **Reset type**: Synchronous reset
 - **Clock signal**: Named `clk` throughout
 - **Clock edge**: Always `posedge clk`
 
