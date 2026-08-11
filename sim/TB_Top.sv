@@ -45,7 +45,13 @@ module Testbench_top();
     end
 
     initial begin
-        rst = 1;
+        $dumpfile("waveform.vcd");
+        $dumpvars(0, Testbench_top);
+    end
+
+    initial begin
+        rst = 0;
+        #5  rst = 1;
         #25 rst = 0;
     end
 
