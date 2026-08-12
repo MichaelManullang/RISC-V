@@ -12,14 +12,14 @@ module imm_generator (
 
     always_comb begin
         case (opcode)
-            7'b0010011,             // I-type ALU
-            7'b0000011,             // loads
-            7'b1100111 : imm_type = IMM_I;   // JALR
-            7'b0100011 : imm_type = IMM_S;   // stores
-            7'b1100011 : imm_type = IMM_B;   // branches
-            7'b0110111,             // LUI
-            7'b0010111 : imm_type = IMM_U;   // AUIPC
-            7'b1101111 : imm_type = IMM_J;   // JAL
+            7'b0010011,                     // I-type ALU
+            7'b0000011,                     // loads
+            7'b1100111 : imm_type = IMM_I;  // JALR
+            7'b0100011 : imm_type = IMM_S;  // stores
+            7'b1100011 : imm_type = IMM_B;  // branches
+            7'b0110111,                     // LUI
+            7'b0010111 : imm_type = IMM_U;  // AUIPC
+            7'b1101111 : imm_type = IMM_J;  // JAL
             default    : imm_type = IMM_NONE; // R-type, no immediate
         endcase
     end

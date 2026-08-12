@@ -1,6 +1,6 @@
 module imem #(
     parameter MEM_DEPTH = 1024,           
-    parameter string MEM_FILE = "program.hex"
+    parameter string MEM_FILE = "program_2b.hex"
 )(
     input  logic [31:0] addr,             
     output logic [31:0] rdata             

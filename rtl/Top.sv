@@ -14,9 +14,13 @@ module Top (
     logic   [31:0]  rs2_data;
     logic           reg_write;
     logic   [4:0]   rd_addr;
-    logic   [31:0]  rd_data;
     logic   [31:0]  imm_data;
+    logic   [31:0]  alu_out;
     alu_op_t        alu_op;
+    logic           mem_read;
+    logic           mem_write;
+    logic           mem_to_reg;
+    logic   [31:0]  dmem_out;
 
     program_counter pc_inst(
         .clk(clk),
@@ -36,7 +40,10 @@ module Top (
         .reg_write(reg_write),
         .rs1_addr(rs1_addr),
         .rs2_addr(rs2_addr),
-        .rd_addr(rd_addr)
+        .rd_addr(rd_addr),
+        .mem_read(mem_read),
+        .mem_write(mem_write),
+        .mem_to_reg(mem_to_reg)
     );
 
     imm_generator imm_gen_inst(
@@ -51,7 +58,7 @@ module Top (
         .rs2_addr(rs2_addr),
         .rs2_data(rs2_data),
         .rd_addr(rd_addr),
-        .rd_data(rd_data),
+        .rd_data(mem_to_reg ? dmem_out : alu_out),
         .reg_write(reg_write)
     );
 
@@ -59,7 +66,17 @@ module Top (
         .alu_op(alu_op),
         .operand_a(rs1_data),
         .operand_b(imm_select ? imm_data : rs2_data),
-        .result(rd_data)
+        .result(alu_out)
+    );
+
+    dmem dmem_inst(
+        .clk(clk),
+        .addr(alu_out),
+        .write_data(rs2_data),
+        .mem_read(mem_read),
+        .mem_write(mem_write),
+        .funct3(instruction[14:12]),
+        .read_data(dmem_out)
     );
 
 endmodule
