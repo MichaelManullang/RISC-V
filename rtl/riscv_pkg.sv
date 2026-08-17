@@ -7,7 +7,8 @@ package riscv_pkg;
         R_type  =   7'b0110011,
         IM_type =   7'b0010011,
         IL_type =   7'b0000011,
-        S_type  =   7'b0100011
+        S_type  =   7'b0100011,
+        B_type  =   7'b1100011
     } opcode_t;
 
     typedef enum logic [2:0] {

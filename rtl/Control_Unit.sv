@@ -6,6 +6,7 @@ module control_unit(
     output  logic           imm_select,
 
     output  alu_op_t        alu_op,
+    output  logic           branch,
 
     output  logic           reg_write,
     output  logic [4:0]     rs1_addr,
@@ -24,8 +25,10 @@ module control_unit(
     assign rd_addr      = instruction[11:7];
     assign funct3       = instruction[14:12];
     assign rs1_addr     = instruction[19:15];
-    assign rs2_addr     = (opcode == R_type || opcode == S_type) ? instruction[24:20] : 5'd0;
+    assign rs2_addr     = (opcode == R_type || opcode == S_type || opcode == B_type) ? instruction[24:20] : 5'd0;
     // logic [6:0] funct7  = (opcode == R_type) ? instruction[31:25] : 7'd0; //WILL BE USED LATER ON
+
+    assign branch       = (opcode == B_type);
 
     always_comb begin : decode
         case (opcode)
@@ -83,6 +86,22 @@ module control_unit(
                 mem_write   = 1;
                 mem_to_reg  = 0;
                 alu_op      = ADD;
+            end
+
+            B_type  : begin
+                imm_select  = 0;
+                reg_write   = 0;
+                mem_read    = 0;
+                mem_write   = 0;
+                mem_to_reg  = 0;
+                case (funct3)
+                    3'b000  : alu_op    = SUB;
+                    3'b001  : alu_op    = SUB;
+                    3'b100  : alu_op    = SLT;
+                    3'b101  : alu_op    = SLT;
+                    3'b110  : alu_op    = SLTU;
+                    3'b111  : alu_op    = SLTU;
+                endcase
             end
 
             default: begin

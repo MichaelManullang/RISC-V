@@ -6,6 +6,7 @@ module Top (
 );
 
     logic   [31:0]  pc;
+    logic   [31:0]  branch_target;
     logic   [31:0]  instruction;
     logic           imm_select;
     logic   [4:0]   rs1_addr;
@@ -21,10 +22,16 @@ module Top (
     logic           mem_write;
     logic           mem_to_reg;
     logic   [31:0]  dmem_out;
+    logic           branch_taken;
+    logic           branch;
+
+    assign  branch_target   = pc + imm_data;
 
     program_counter pc_inst(
         .clk(clk),
         .rst(rst),
+        .take_branch(branch_taken && branch),
+        .branch_target(branch_target),
         .pc(pc)
     );
 
@@ -37,6 +44,7 @@ module Top (
         .instruction(instruction),
         .imm_select(imm_select),
         .alu_op(alu_op),
+        .branch(branch),
         .reg_write(reg_write),
         .rs1_addr(rs1_addr),
         .rs2_addr(rs2_addr),
@@ -77,6 +85,12 @@ module Top (
         .mem_write(mem_write),
         .funct3(instruction[14:12]),
         .read_data(dmem_out)
+    );
+
+    branch_comparator branch_comp_inst(
+        .alu_result(alu_out),
+        .funct3(instruction[14:12]),
+        .branch_taken(branch_taken)
     );
 
 endmodule
