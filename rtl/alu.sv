@@ -1,6 +1,6 @@
 import riscv_pkg::*;
 
-module ALU (
+module alu (
     input   alu_op_t        alu_op,
     input   logic [31:0]    operand_a,
     input   logic [31:0]    operand_b,

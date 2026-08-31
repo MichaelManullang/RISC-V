@@ -26,8 +26,8 @@ A staged build plan for designing an RV32I core from scratch, verifying entirely
 
 ## Stage 2 — Single-Cycle RV32I Core (built incrementally, R+I-type first)
 
-### Stage 2A — R-type + I-type ALU ops only (current milestone)
-Scope: ADD/SUB/AND/OR/XOR/SLL/SRL/SRA/SLT/SLTU + their I-type immediate forms.
+### Stage 2A — R-type + I-type ALU ops only
+Scope: Implement ADD/SUB/AND/OR/XOR/SLL/SRL/SRA/SLT/SLTU + their I-type immediate forms.
 No loads/stores, no branches/jumps — PC is just PC+4 every cycle, no data memory yet.
 - [x] Implement Program Counter (PC+4 only, no mux yet) — **✅ PC.sv**
 - [x] Implement instruction memory interface — **✅ imem.sv**
@@ -41,25 +41,25 @@ No loads/stores, no branches/jumps — PC is just PC+4 every cycle, no data memo
 - [x] Set up shared package (e.g. `riscv_pkg.sv`) for shared types like `alu_op_t` across modules — **✅ riscv_pkg.sv**
 
 ### Stage 2B — Loads & Stores
-- [ ] Implement data memory interface (load/store, byte/half/word, sign/zero extend)
-- [ ] Extend immediate generator with S-type
-- [ ] Extend control unit decode table with load/store opcodes
-- [ ] Testbenches: memory read/write round-trips
+- [x] Implement data memory interface (load/store, byte/half/word, sign/zero extend) — **✅ dmem.sv**
+- [x] Extend immediate generator with S-type — **✅ already covered (imm_generator.sv has all formats)**
+- [x] Extend control unit decode table with load/store opcodes — **✅ IL_type + S_type added**
+- [x] Testbenches: memory read/write round-trips — **✅ TB_Top_2B.sv, 34/34 pass**
 
 ### Stage 2C — Branches
-- [ ] Extend PC logic with branch mux (PC+4 vs branch target)
-- [ ] Extend immediate generator with B-type
-- [ ] Extend control unit decode table with branch opcodes
-- [ ] Testbenches: loops, conditional branch correctness
+- [x] Extend PC logic with branch mux (PC+4 vs branch target) — **✅ PC.sv (take_branch + branch_target)**
+- [x] Extend immediate generator with B-type — **✅ already covered (imm_generator.sv)**
+- [x] Extend control unit decode table with branch opcodes — **✅ B_type + branch_comparator.sv**
+- [x] Testbenches: loops, conditional branch correctness — **✅ TB_Top_2C.sv, 16/16 pass**
 
 ### Stage 2D — LUI / AUIPC / JAL (remaining base ISA)
-- [ ] Extend immediate generator with U-type and J-type
-- [ ] Extend control unit decode table with LUI/AUIPC/JAL
-- [ ] Testbenches: function-call-style control flow
+- [x] Extend immediate generator with U-type and J-type — **✅ already covered (imm_generator.sv)**
+- [x] Extend control unit decode table with LUI/AUIPC/JAL — **✅ LUI_type, AUIPC_type, JAL_type + alu_a_sel + reg_sel**
+- [x] Testbenches: function-call-style control flow — **✅ TB_Top_2D.sv, 5/5 pass**
 
 ### Stage 2E — Full Stage 2 wrap-up
-- [ ] Re-run all testbenches across the complete R+I+S+B+U+J instruction set together
-- [ ] Confirm full single-cycle datapath (as drafted in the Stage 1 block diagram, extended with data memory + branch mux) matches implementation
+- [x] Re-run all testbenches across the complete R+I+S+B+U+J instruction set together — **✅ TB_Top_2E.sv, === PASS ===**
+- [x] Confirm full single-cycle datapath (as drafted in the Stage 1 block diagram, extended with data memory + branch mux) matches implementation — **✅ complete**
 
 ---
 

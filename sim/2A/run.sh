@@ -12,7 +12,7 @@ iverilog -g2012 \
     rtl/PC.sv \
     rtl/imem.sv \
     rtl/regfile.sv \
-    rtl/ALU.sv \
+    rtl/alu.sv \
     rtl/imm_generator.sv \
     rtl/Control_Unit.sv \
     rtl/Top.sv \
