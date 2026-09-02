@@ -25,7 +25,7 @@ module TB_Top_2D();
         .rst(rst)
     );
 
-    defparam dut.imem_inst.MEM_FILE = "program_2d.hex";
+    defparam dut.imem_inst.MEM_FILE = "hex/program_2d.hex";
 
     // ── Clock & reset ──
     initial begin

@@ -7,7 +7,7 @@ module TB_2E();
     initial begin rst=1; #25 rst=0; end
 
     Top dut(.clk(clk), .rst(rst));
-    defparam dut.imem_inst.MEM_FILE = "program_2e.hex";
+    defparam dut.imem_inst.MEM_FILE = "hex/program_2e.hex";
 
     initial begin
         #(25 + 60*20 + 60);

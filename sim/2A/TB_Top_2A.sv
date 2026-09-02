@@ -60,7 +60,7 @@ module Testbench_top();
         .rst(rst)
     );
 
-    defparam dut.imem_inst.MEM_FILE = "program_2a.hex";
+    defparam dut.imem_inst.MEM_FILE = "hex/program_2a.hex";
 
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin

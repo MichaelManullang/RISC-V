@@ -39,7 +39,7 @@ module TB_Top_2C();
         .rst(rst)
     );
 
-    defparam dut.imem_inst.MEM_FILE = "program_2c.hex";
+    defparam dut.imem_inst.MEM_FILE = "hex/program_2c.hex";
 
     // ── Clock & reset ──
     initial begin

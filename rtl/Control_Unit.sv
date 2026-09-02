@@ -17,11 +17,13 @@ module control_unit(
 
     output  logic           mem_read,
     output  logic           mem_write,
-    output  reg_sel_t       reg_sel
+    output  reg_sel_t       reg_sel,
+    output  logic           csr_write,
+
+    output  logic [2:0]     funct3
 );
 
     logic [6:0] opcode;
-    logic [2:0] funct3;
 
     assign opcode       = instruction[6:0];
     assign rd_addr      = instruction[11:7];
@@ -34,6 +36,7 @@ module control_unit(
     assign jump         = (opcode == JAL_type);
 
     always_comb begin : decode
+        csr_write   = 0;
         case (opcode)
             R_type  : begin
                 imm_select  = 0;
@@ -141,6 +144,17 @@ module control_unit(
                 reg_sel     = PC4;
                 alu_a_sel   = 0;
                 alu_op      = ADD;
+            end
+
+            CSR_type    : begin
+                imm_select  = 0;
+                reg_write   = 1;
+                mem_read    = 0;
+                mem_write   = 0;
+                reg_sel     = CSR;
+                alu_a_sel   = 0;
+                alu_op      = ADD;
+                csr_write   = 1;
             end
 
             default: begin

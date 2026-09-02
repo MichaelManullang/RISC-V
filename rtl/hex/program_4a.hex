@@ -1,0 +1,7 @@
+// program_4a.hex: Independent instructions (no data dependencies)
+// ADDI x1, x0, 10    → x1 = 10
+// ADDI x2, x0, 20    → x2 = 20  
+// ADDI x3, x0, 30    → x3 = 30
+00A00093
+01400113
+01E00193

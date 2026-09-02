@@ -1,5 +1,5 @@
 module dmem #(
-    parameter MEM_DEPTH = 1024
+    parameter MEM_DEPTH = 4096
 )(
     input   logic           clk,
     input   logic [31:0]    addr,        
